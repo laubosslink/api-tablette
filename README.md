@@ -32,11 +32,6 @@ method:POST   url: /image/{id}
 method:GET   url: /image/{id}
 ```
 
-#### Publier?
-```
-method:POST   url: /image/publish
-```
-
 #### Supprimer (admin)
 ```
 method:GET   url: /image/delete/{id}
