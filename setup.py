@@ -6,47 +6,45 @@ from optparse import OptionParser
 
 import logging
 
-from flask import Flask
-
-app = Flask(__name__)
-
 import os
-from flask import Blueprint, request, redirect, url_for, send_from_directory
+from flask import Flask, request, redirect, url_for, send_from_directory
 from werkzeug import secure_filename
 
-route_upload_file = Blueprint('upload_file', __name__)
-route_uploaded_file = Blueprint('uploaded_file', __name__)
+app = Flask(__name__)
 
 UPLOAD_FOLDER = './files'
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
 
-def allowed_file(filename):
+def dessin_allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
 
-@app.route('/image', methods=['GET', 'POST'])
-def upload_file():
-    if request.method == 'POST':
-        file = request.files['file']
-        if file and allowed_file(file.filename):
+@app.route('/image', methods=['POST'])
+def dessin_upload_file():
+    file = request.files['file']
+    if file and dessin_allowed_file(file.filename):
+        filename = secure_filename(file.filename)
+        file.save(os.path.join(UPLOAD_FOLDER + "/dessins/", filename))
+        return ('', 204)
+
+@app.route('/image/<filename>', methods=['POST', 'GET']) # TODO replace filename by id from database
+def dessin_edit_get_file(filename):
+    if request.method == 'POST': # edit
+        file = request.files['data']
+        if file and dessin_allowed_file(file.filename):
             filename = secure_filename(file.filename)
             file.save(os.path.join(UPLOAD_FOLDER + "/dessins/", filename))
-            return url_for('uploaded_file', filename=filename)
+            return ('', 204)
 
-    return '''
-    <!doctype html>
-    <title>Upload new File</title>
-    <h1>Upload new File</h1>
-    <form action="" method=post enctype=multipart/form-data>
-      <p><input type="file" name="file">
-         <input type="submit" value="Upload">
-    </form>
-    '''
+    return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
 
-@app.route('/image/<filename>')
-def uploaded_file(filename):
-    return send_from_directory(app.config['UPLOAD_FOLDER'],
-                               filename)
+@app.route('/image/delete/<filename>', methods=['GET'])
+def dessin_delete_file(filename):
+    try:
+        os.remove(os.path.join(UPLOAD_FOLDER + "/dessins/", filename))
+    except Exception as e:
+        return (str(e), 202)
+    return ('', 204)
 
 if __name__ == "__main__":
     parser = OptionParser()
