@@ -2,37 +2,15 @@
 
 API permettant d'échanger des données avec le serveur de stockage principal
 
-## Services
-
-### Dessin
-
-Fonctionnalités:
-  * créer
-  * éditer
-  * envoyer
-  * sauvegarder
-  * suppression
-
-#### Créer
+## Lancer le serveur
 
 ```
-/dessin/add
+python setup.py
 ```
-**return**: l'id du dessin
+**Note**: l'option -h|--help permet d'avoir de l'aide
 
-### Info
+## Lancer les tests
 
-Fonctionnalités:
-  * lire
-  * éditer
-  * supprimer
-
-### Forum
-
-Fonctionnalités:
-  * lire
-  * ajouter
-  * editer
-  * commenter
-  * upvote/downvote
-  * supprimer
+```
+python setup.py --tests
+```
