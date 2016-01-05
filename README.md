@@ -49,6 +49,10 @@ method:GET   url: /image/delete/{id}
 method:POST   url: /info/
 retour: id de l'info
 ```
+Args:
+  * **title**: the title useful as keywords
+  * **content**: content for information
+
 **return**: id de l'information
 
 #### Get
@@ -60,7 +64,7 @@ retour: info content
 
 #### Supprimer (admin)
 ```
-method:GET   url: /info/delete{id}
+method:GET   url: /info/delete/{id}
 ```
 
 ### Post forum

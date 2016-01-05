@@ -52,8 +52,11 @@ class Post(Base):
         self.title = title
         self.content = content
 
+    def voteUp(self):
+        self.vote += 1
+
     def __repr__(self):
-        return "Post(%r, %r, %r)" % (self.id, self.title, self.content)
+        return "Post(%r, %r, %r, %r)" % (self.id, self.title, self.content, self.vote)
 
 if __name__ == '__main__':
     engine = create_engine('sqlite:///db.sql')

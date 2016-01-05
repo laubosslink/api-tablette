@@ -7,13 +7,15 @@ from optparse import OptionParser
 import logging
 
 import os
-from flask import Flask, request, redirect, url_for, send_from_directory
+from flask import Flask, request, redirect, url_for, send_from_directory, json
 from werkzeug import secure_filename
 
 app = Flask(__name__)
 
 UPLOAD_FOLDER = './files'
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
+
+# DESSINS
 
 def dessin_allowed_file(filename):
     return '.' in filename and \
@@ -45,6 +47,23 @@ def dessin_delete_file(filename):
     except Exception as e:
         return (str(e), 202)
     return ('', 204)
+
+# INFOS
+
+@app.route('/info', methods=["POST"])
+def info_create():
+    title = request.title
+    content = request.content
+
+@app.route('/info/<id>', methods=["GET"])
+def info_get(id):
+    return json.jsonify(title="title from DB", content="content from DB")
+
+@app.route('/info/delete/<id>')
+def info_delete(id):
+    return ('', 204)
+
+# FORUM
 
 if __name__ == "__main__":
     parser = OptionParser()

@@ -23,3 +23,13 @@ try:
     session.commit()
 except:
     session.rollback()
+
+p1.voteUp()
+p1.voteUp()
+p1.voteUp()
+p1.voteUp()
+
+try:
+    session.commit()
+except:
+    session.rollback()
