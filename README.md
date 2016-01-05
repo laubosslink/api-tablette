@@ -134,3 +134,13 @@ method:GET url: /comment/postID/{id}
 - forum
   - posts
     - commentaires
+
+
+# Fonction de la base de donnée
+
+- créer post/dessin/info
+- get all post/dessin/info
+- get un dessin
+- get un post + get all comment associé
+- upvote ou downvote un post/comment/dessin
+- delete post/comment/dessin/info
