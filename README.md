@@ -4,6 +4,11 @@ API permettant d'échanger des données avec le serveur de stockage principal
 
 ## Lancer le serveur
 
+```
+python setup.py -d DEBUG
+```
+**Note**: utiliser l'option -h|--help pour avoir de l'aide
+
 ## Services
 
 ### Dessin
