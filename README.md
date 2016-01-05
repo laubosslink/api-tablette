@@ -79,6 +79,10 @@ Fonctionnalités:
 ```
 method:POST   url: /post/
 ```
+Args:
+  * **title**
+  * **content**
+  * picture: picture id (optional)
 **return**: id du post
 
 #### Get
@@ -107,26 +111,26 @@ Fonctionnalités:
 
 #### Créer
 ```
-method:GET url: /comment/postID/
+method:GET url: /post/{post_id}/comment/
 retour: id comment
 ```
 **return**: commentaire id
 
 #### Get
 ```
-method:GET url: /comment/postID/{id}
+method:GET url: /post/{post_id}/comment/{id}
 retour: content
 ```
 **return**: commentaire
 
 ####  Upvote/downvote
 ```
-method:POST   url: /comment/postID/{id}/vote/{0,1}
+method:POST   url: /post/{post_id}/comment/{id}/vote/{0,1}
 ```
 
 #### supprimer (admin)
 ```
-method:GET url: /comment/postID/{id}
+method:GET url: /post/{post_id}/comment/{id}
 ```
 
 #Service back-end API

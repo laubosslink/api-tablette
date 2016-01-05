@@ -59,11 +59,44 @@ def info_create():
 def info_get(id):
     return json.jsonify(title="title from DB", content="content from DB")
 
-@app.route('/info/delete/<id>')
+@app.route('/info/delete/<id>', methods=['GET'])
 def info_delete(id):
     return ('', 204)
 
 # FORUM
+@app.route('/post/', methods=['POST'])
+def post_create():
+    title = request.title
+    content = request.content
+    picture = request.picture
+
+@app.route('/post/<id>', methods=["GET"])
+def post_get(id):
+    return json.jsonify(posts="return posts with comments, and vote")
+
+@app.route('/post/<id>/vote/<vote_value>', methods=['POST'])
+def post_vote(id, vote_value):
+    return ('', 204)
+
+@app.route('/post/delete/<id>', methods=['GET'])
+def post_delete(id):
+    return ('', 204)
+
+@app.route('/post/<post_id>/comment', methods=['POST'])
+def comment_create(post_id):
+    content = request.content
+
+@app.route('/post/<post_id>/comment/<id>', methods=["GET"])
+def comment_get(post_id, id):
+    return json.jsonify(posts="return posts with comments, and vote")
+
+@app.route('/post/<post_id>/comment/<id>/vote/<vote_value>', methods=['POST'])
+def comment_vote(post_id, id, vote_value):
+    return ('', 204)
+
+@app.route('/post/<post_id>/comment/delete/<id>', methods=['GET'])
+def comment_delete(post_id, id):
+    return ('', 204)
 
 if __name__ == "__main__":
     parser = OptionParser()
