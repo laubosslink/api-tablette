@@ -10,6 +10,16 @@ import os
 from flask import Flask, request, redirect, url_for, send_from_directory, json
 from werkzeug import secure_filename
 
+from sqlalchemy import *
+from sqlalchemy.orm import relation, sessionmaker
+
+from scripts.create_db import Info, Post, Comment
+
+engine = create_engine('sqlite:///db.sql')
+
+Session = sessionmaker(bind=engine)
+session = Session()
+
 app = Flask(__name__)
 
 UPLOAD_FOLDER = './files'
@@ -50,17 +60,29 @@ def dessin_delete_file(filename):
 
 # INFOS
 
-@app.route('/info', methods=["POST"])
+@app.route('/info', methods=['POST'])
 def info_create():
-    title = request.title
-    content = request.content
+    title = request.form.get('title')
+    content = request.form.get('content')
+    info = Info(title, content)
 
-@app.route('/info/<id>', methods=["GET"])
+    try:
+        session.add(info)
+        session.commit()
+    except Exception as e:
+        session.rollback()
+        logging.error('L\'information existe deja : ' + str(e))
+
+    return (str(info.id), 202)
+
+@app.route('/info/<id>', methods=['GET'])
 def info_get(id):
-    return json.jsonify(title="title from DB", content="content from DB")
+    info = session.query(Info).get(id)
+    return json.jsonify(title=info.title, content=info.content)
 
-@app.route('/info/delete/<id>', methods=['GET'])
-def info_delete(id):
+@app.route('/info/delete/<info_id>', methods=['GET'])
+def info_delete(info_id):
+    info = session.query(Info).filter_by(id=info_id).delete()
     return ('', 204)
 
 # FORUM
