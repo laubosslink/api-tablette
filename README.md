@@ -2,6 +2,13 @@
 
 API permettant d'échanger des données avec le serveur de stockage principal
 
+## Dépendances
+
+```
+sudo pip install -r requirements.txt
+```
+**Note**: Pour windows consulter l'installation de pip (au lien suivant)[http://stackoverflow.com/questions/4750806/how-to-install-pip-on-windows]
+
 ## Lancer le serveur
 
 ```
