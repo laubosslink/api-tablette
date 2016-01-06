@@ -13,7 +13,7 @@ from werkzeug import secure_filename
 from sqlalchemy import *
 from sqlalchemy.orm import relation, sessionmaker
 
-from scripts.create_db import Info
+from scripts.create_db import Info, Drawing
 
 engine = create_engine('sqlite:///db.sql')
 
@@ -34,46 +34,79 @@ def dessin_allowed_file(filename):
 @app.route('/image', methods=['POST'])
 def dessin_upload_file():
     file = request.files['file']
+
     if file and dessin_allowed_file(file.filename):
         filename = secure_filename(file.filename)
         file.save(os.path.join(UPLOAD_FOLDER + "/dessins/", filename))
-        return ('', 204)
 
-@app.route('/image/<filename>', methods=['POST', 'GET']) # TODO replace filename by id from database
-def dessin_edit_get_file(filename):
+        draw = Drawing(filename)
+
+        try:
+            session.add(draw)
+            session.commit()
+        except Exception as e:
+            session.rollback()
+            logging.error('L\'image existe deja : ' + str(e))
+
+        return (str(draw.id), 202)
+
+@app.route('/image/<draw_id>', methods=['POST', 'GET'])
+def dessin_edit_get_file(draw_id):
+
+    draw = session.query(Drawing).get(draw_id)
+
     if request.method == 'POST': # edit
-        file = request.files['data']
+        file = request.files['file']
         if file and dessin_allowed_file(file.filename):
             filename = secure_filename(file.filename)
             file.save(os.path.join(UPLOAD_FOLDER + "/dessins/", filename))
+            # TODO update date modification
             return ('', 204)
 
     return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
 
-@app.route('/image/delete/<filename>', methods=['GET'])
-def dessin_delete_file(filename):
+@app.route('/image/delete/<draw_id>', methods=['GET'])
+def dessin_delete_file(draw_id):
+
+    file = session.query(Drawing).get(draw_id)
+
     try:
-        os.remove(os.path.join(UPLOAD_FOLDER + "/dessins/", filename))
+        os.remove(os.path.join(UPLOAD_FOLDER + "/dessins/", file.filename))
     except Exception as e:
         return (str(e), 202)
+
+    try:
+        file.delete()
+    except:
+        logging.error('Cannot delete file in database')
+
     return ('', 204)
 
 # INFOS
-
-@app.route('/info', methods=['POST'])
+@app.route('/info', methods=['POST', 'GET'])
 def info_create():
-    title = request.form.get('title')
-    content = request.form.get('content')
-    info = Info(title, content)
+    if request.method == 'POST':
+        title = request.form.get('title')
+        content = request.form.get('content')
+        info = Info(title, content)
 
-    try:
-        session.add(info)
-        session.commit()
-    except Exception as e:
-        session.rollback()
-        logging.error('L\'information existe deja : ' + str(e))
+        try:
+            session.add(info)
+            session.commit()
+        except Exception as e:
+            session.rollback()
+            logging.error('L\'information existe deja : ' + str(e))
 
-    return (str(info.id), 202)
+        return (str(info.id), 202)
+
+    infos = session.query(Info).all()
+
+    ids = []
+
+    for info in infos:
+        ids.append(info.id)
+
+    return json.dumps(ids)
 
 @app.route('/info/<id>', methods=['GET'])
 def info_get(id):

@@ -29,15 +29,19 @@ Fonctionnalités:
 
 #### Create
 ```
-method:POST   url: /image/
+method:POST   url: /image
 ```
+Args:
+  * **file**: image
+
 **return**: image id
 
 #### Edit
 ```
 method:POST   url: /image/{id}
 ```
-**data**: image
+Args:
+  * **file**: image
 
 #### Get
 ```
@@ -53,7 +57,7 @@ method:GET   url: /image/delete/{id}
 
 #### Create
 ```
-method:POST   url: /info/
+method:POST   url: /info
 ```
 Args:
   * **title**: the title useful as keywords
@@ -63,7 +67,7 @@ Args:
 
 #### Get All
 ```
-method:GET   url: /info/
+method:GET   url: /info
 ```
 **return**: Array of the info id
 
