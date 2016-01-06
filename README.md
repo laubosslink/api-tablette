@@ -27,13 +27,13 @@ Fonctionnalités:
   * sauvegarder
   * suppression
 
-#### Créer
+#### Create
 ```
 method:POST   url: /image/
 ```
-**return**: l'id de l'image
+**return**: image id
 
-#### Editer
+#### Edit
 ```
 method:POST   url: /image/{id}
 ```
@@ -51,10 +51,9 @@ method:GET   url: /image/delete/{id}
 
 ### Info
 
-#### Créer
+#### Create
 ```
 method:POST   url: /info/
-retour: id de l'info
 ```
 Args:
   * **title**: the title useful as keywords
@@ -62,27 +61,32 @@ Args:
 
 **return**: id de l'information
 
+#### Get All
+```
+method:GET   url: /info/
+```
+**return**: Array of the info id
+
 #### Get
 ```
 method:GET   url: /info/{id}
-retour: info content
 ```
-**return**: contenu
+**return**: content
 
-#### Supprimer (admin)
+#### Delete (admin)
 ```
 method:GET   url: /info/delete/{id}
 ```
 
 ### Post forum
 
-Fonctionnalités:
-  * lire
-  * créer
+Feature:
+  * Get
+  * create
   * upvote/downvote
-  * supprimer
+  * delete
 
-#### Créer
+#### Create
 ```
 method:POST   url: /post/
 ```
@@ -90,13 +94,20 @@ Args:
   * **title**
   * **content**
   * picture: picture id (optional)
+
 **return**: id du post
+
+#### Get All
+```
+method:GET url: /post/
+```
+**return**: array of post id
 
 #### Get
 ```
 method:GET   url: /post/{id}
 ```
-**return**: image
+**return**: post
 
 #### Upvote/downvote
 ```
@@ -108,34 +119,39 @@ method:POST   url: /post/{id}/vote/{0,1}
 method:GET   url: /post/delete{id}
 ```
 
-### Commentaires
+### Comment
 
-Fonctionnalités:
-  * lire
+Features:
+  * Get
   * créer
   * upvote/downvote
-  * supprimer
+  * delete
 
-#### Créer
+#### Create
 ```
 method:GET url: /post/{post_id}/comment/
 retour: id comment
 ```
 **return**: commentaire id
 
+#### Get All
+```
+method:GET url: /post/{post_id}/comment/
+```
+**return**: Array of comment id which are on post_id
+
 #### Get
 ```
 method:GET url: /post/{post_id}/comment/{id}
-retour: content
 ```
-**return**: commentaire
+**return**: comment
 
 ####  Upvote/downvote
 ```
 method:POST   url: /post/{post_id}/comment/{id}/vote/{0,1}
 ```
 
-#### supprimer (admin)
+#### Delete (admin)
 ```
 method:GET url: /post/{post_id}/comment/{id}
 ```
