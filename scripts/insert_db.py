@@ -1,4 +1,4 @@
-from create_db import Info, Post, Comment
+from create_db import Info
 
 from sqlalchemy import *
 from sqlalchemy.orm import relation, sessionmaker

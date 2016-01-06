@@ -1,4 +1,4 @@
-from create_db import Info,Comment,Post
+from create_db import Info
 
 from sqlalchemy import *
 from sqlalchemy.ext.declarative import declarative_base

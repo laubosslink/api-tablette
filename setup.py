@@ -13,7 +13,7 @@ from werkzeug import secure_filename
 from sqlalchemy import *
 from sqlalchemy.orm import relation, sessionmaker
 
-from scripts.create_db import Info, Post, Comment
+from scripts.create_db import Info
 
 engine = create_engine('sqlite:///db.sql')
 
