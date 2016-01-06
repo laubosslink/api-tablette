@@ -2,6 +2,8 @@ from sqlalchemy import *
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relation, relationship, sessionmaker
 
+import datetime
+
 Base = declarative_base()
 
 class Info(Base):
@@ -25,6 +27,7 @@ class Comment(Base):
     id = Column(Integer, primary_key=True)
     content = Column(String(), unique=False, nullable=False)
     vote = Column(Integer, default=0)
+    date_creation = Column(DateTime, default=datetime.datetime.utcnow)
 
     post_id = Column(Integer, ForeignKey('post.id'))
 
@@ -35,7 +38,7 @@ class Comment(Base):
         self.post = post
 
     def __repr__(self):
-        return "Comment(%r, %r)" % (self.post_id, self.content)
+        return "Comment(post_id:%r, content:%r, date:%r)" % (self.post_id, self.content, self.date_creation)
 
 class Post(Base):
     __tablename__ = 'post'
@@ -45,6 +48,7 @@ class Post(Base):
     content = Column(String(), unique=False, nullable=False)
     #picture = Column(String())
     vote = Column(Integer, default=0)
+    date_creation = Column(DateTime, default=datetime.datetime.utcnow)
 
     comments = relationship("Comment")
 
@@ -56,7 +60,7 @@ class Post(Base):
         self.vote += 1
 
     def __repr__(self):
-        return "Post(%r, %r, %r, %r)" % (self.id, self.title, self.content, self.vote)
+        return "Post(id:%r, title:%r, content:%r, vote:%r, date:%r)" % (self.id, self.title, self.content, self.vote, self.date_creation)
 
 if __name__ == '__main__':
     engine = create_engine('sqlite:///db.sql')
