@@ -76,7 +76,8 @@ def dessin_delete_file(draw_id):
         return (str(e), 202)
 
     try:
-        file.delete()
+        session.delete(file)
+        session.commit()
     except:
         logging.error('Cannot delete file in database')
 
@@ -115,7 +116,7 @@ def info_get(id):
 
 @app.route('/info/delete/<info_id>', methods=['GET'])
 def info_delete(info_id):
-    info = session.query(Info).filter_by(id=info_id).delete()
+    session.query(Info).filter_by(id=info_id).delete()
     return ('', 204)
 
 if __name__ == "__main__":
