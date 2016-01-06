@@ -14,16 +14,3 @@ print "INFOS:"
 infos = session.query(Info).all()
 for info in infos:
     print info
-
-print "\nCOMMENTS:"
-
-comments = session.query(Comment).all()
-for comment in comments:
-    print comment
-
-print "\nPOSTS:"
-
-posts = session.query(Post).all()
-for post in posts:
-    print post
-    print post.comments

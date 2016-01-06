@@ -10,26 +10,8 @@ session = Session()
 
 i1 = Info("Monument de la beaute", "Existe depuis ... bla bla")
 
-p1 = Post('Hello world', 'Sample post with hello world content')
-
-c1 = Comment(p1, 'Just one answer for sample post')
-c2 = Comment(p1, 'Just one answer for sample post')
-
 try:
     session.add(i1)
-    session.add(p1)
-    session.add(c1)
-    session.add(c2)
-    session.commit()
-except:
-    session.rollback()
-
-p1.voteUp()
-p1.voteUp()
-p1.voteUp()
-p1.voteUp()
-
-try:
     session.commit()
 except:
     session.rollback()
