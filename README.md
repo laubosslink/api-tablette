@@ -87,6 +87,7 @@ Args:
   * **title**
   * **content**
   * picture: picture id (optional)
+
 **return**: id du post
 
 #### Get All
