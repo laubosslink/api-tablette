@@ -43,6 +43,12 @@ method:POST   url: /image/{id}
 Args:
   * **file**: image
 
+#### Get All
+```
+method:GET   url: /image
+```
+**return**: Array of the info id
+
 #### Get
 ```
 method:GET   url: /image/{id}

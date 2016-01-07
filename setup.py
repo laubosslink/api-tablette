@@ -31,24 +31,35 @@ def dessin_allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
 
-@app.route('/image', methods=['POST'])
+@app.route('/image', methods=['POST', 'GET'])
 def dessin_upload_file():
-    file = request.files['file']
+    if request.method == 'POST':
+        file = request.files['file']
 
-    if file and dessin_allowed_file(file.filename):
-        filename = secure_filename(file.filename)
-        file.save(os.path.join(UPLOAD_FOLDER + "/dessins/", filename))
+        if file and dessin_allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(UPLOAD_FOLDER + "/dessins/", filename))
 
-        draw = Drawing(filename)
+            draw = Drawing(filename)
 
-        try:
-            session.add(draw)
-            session.commit()
-        except Exception as e:
-            session.rollback()
-            logging.error('L\'image existe deja : ' + str(e))
+            try:
+                session.add(draw)
+                session.commit()
+            except Exception as e:
+                session.rollback()
+                logging.error('L\'image existe deja : ' + str(e))
 
-        return (str(draw.id), 202)
+            return (str(draw.id), 202)
+
+
+    images = session.query(Drawing).all()
+
+    ids = []
+
+    for image in images:
+        ids.append(image.id)
+
+    return json.dumps(ids)
 
 @app.route('/image/<draw_id>', methods=['POST', 'GET'])
 def dessin_edit_get_file(draw_id):
