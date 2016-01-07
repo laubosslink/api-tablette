@@ -15,7 +15,7 @@ curl -X GET http://127.0.0.1:5000/info/delete/2
 #read
 #curl -X GET http://127.0.0.1:5000/info/1
 
-curl -X POST -F "file=@files/tests/good-search.png" http://127.0.0.1:5000/image
+curl -X POST -F "title=GoodSearch" -F "file=@files/tests/good-search.png" http://127.0.0.1:5000/image
 
 curl -X GET http://127.0.0.1:5000/image
 

@@ -34,13 +34,14 @@ def dessin_allowed_file(filename):
 @app.route('/image', methods=['POST', 'GET'])
 def dessin_upload_file():
     if request.method == 'POST':
+        title = request.form.get('title')
         file = request.files['file']
 
         if file and dessin_allowed_file(file.filename):
             filename = secure_filename(file.filename)
             file.save(os.path.join(UPLOAD_FOLDER + "/dessins/", filename))
 
-            draw = Drawing(filename)
+            draw = Drawing(title, filename)
 
             try:
                 session.add(draw)

@@ -32,6 +32,7 @@ Fonctionnalités:
 method:POST   url: /image
 ```
 Args:
+  * **title**: image title
   * **file**: image
 
 **return**: image id
