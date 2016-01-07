@@ -55,6 +55,15 @@ method:GET   url: /image
 method:GET   url: /image/{id}
 ```
 
+**return**: image
+
+#### Get by title
+```
+method:GET   url: /image/title/{title}
+```
+
+**return**: image
+
 #### Supprimer (admin)
 ```
 method:GET   url: /image/delete/{id}
@@ -81,6 +90,12 @@ method:GET   url: /info
 #### Get
 ```
 method:GET   url: /info/{id}
+```
+**return**: content
+
+#### Get by title
+```
+method:GET   url: /info/title/{title}
 ```
 **return**: content
 

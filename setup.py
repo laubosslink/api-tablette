@@ -77,6 +77,11 @@ def dessin_edit_get_file(draw_id):
 
     return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
 
+@app.route('/image/title/<title>', methods=['GET'])
+def dessin_get_file_by_title(title):
+    draw = session.query(Drawing).filter(Drawing.title == title).all()[0]
+    return send_from_directory(app.config['UPLOAD_FOLDER'], draw.filename)
+
 @app.route('/image/delete/<draw_id>', methods=['GET'])
 def dessin_delete_file(draw_id):
 
@@ -125,6 +130,12 @@ def info_create():
 def info_get(id):
     info = session.query(Info).get(id)
     return json.jsonify(title=info.title, content=info.content)
+
+
+@app.route('/info/title/<title>', methods=['GET'])
+def info_get_by_title(title):
+    info = session.query(Info).filter(Info.title == title).all()[0]
+    return (info.content, 202)
 
 @app.route('/info/delete/<info_id>', methods=['GET'])
 def info_delete(info_id):
