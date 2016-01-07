@@ -25,6 +25,8 @@ app = Flask(__name__)
 UPLOAD_FOLDER = './files'
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
 
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
 # DESSINS
 
 def dessin_allowed_file(filename):
@@ -75,7 +77,7 @@ def dessin_edit_get_file(draw_id):
             # TODO update date modification
             return ('', 204)
 
-    return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
+    return send_from_directory(app.config['UPLOAD_FOLDER'] + '/dessins/', draw.filename)
 
 @app.route('/image/title/<title>', methods=['GET'])
 def dessin_get_file_by_title(title):
