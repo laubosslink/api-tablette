@@ -57,6 +57,14 @@ method:GET   url: /image/{id}
 
 **return**: image
 
+
+#### Get central data
+```
+method:GET   url: /image/main
+```
+
+**return**: image
+
 #### Get by title
 ```
 method:GET   url: /image/title/{title}

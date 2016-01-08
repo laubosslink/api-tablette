@@ -64,6 +64,11 @@ def dessin_upload_file():
 
     return json.dumps(ids)
 
+@app.route('/image/main', methods=['GET'])
+def dessin_image_principale():
+    draw = session.query(Drawing).filter(Drawing.main == 1).all()[0]
+    return send_from_directory(app.config['UPLOAD_FOLDER'] + '/dessins/', draw.filename)
+
 @app.route('/image/<draw_id>', methods=['POST', 'GET'])
 def dessin_edit_get_file(draw_id):
 

@@ -28,10 +28,12 @@ class Drawing(Base):
     filename = Column(String(255), unique=True, nullable=False)
     date_creation = Column(DateTime, default=datetime.datetime.utcnow)
     date_modification = Column(DateTime, default=datetime.datetime.utcnow)
+    main = Column(Integer())
 
-    def __init__(self, title, filename):
+    def __init__(self, title, filename, main=0):
         self.title = title
         self.filename = filename
+        self.main = main
 
     def __repr__(self):
         return "Drawing(id:%r, title:%r, filename:%r, date_creation:%r, date_modification:%r)" % (self.id, self.filename, self.date_creation, self.date_modification)
