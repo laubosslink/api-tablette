@@ -15,6 +15,7 @@ from sqlalchemy.orm import relation, sessionmaker
 
 from scripts.create_db import Info, Drawing
 
+
 engine = create_engine('sqlite:///db.sql')
 
 Session = sessionmaker(bind=engine)
@@ -27,6 +28,52 @@ ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
+from datetime import timedelta
+from flask import make_response, request, current_app
+from functools import update_wrapper
+
+
+def crossdomain(origin=None, methods=None, headers=None,
+                max_age=21600, attach_to_all=True,
+                automatic_options=True):
+    if methods is not None:
+        methods = ', '.join(sorted(x.upper() for x in methods))
+    if headers is not None and not isinstance(headers, basestring):
+        headers = ', '.join(x.upper() for x in headers)
+    if not isinstance(origin, basestring):
+        origin = ', '.join(origin)
+    if isinstance(max_age, timedelta):
+        max_age = max_age.total_seconds()
+
+    def get_methods():
+        if methods is not None:
+            return methods
+
+        options_resp = current_app.make_default_options_response()
+        return options_resp.headers['allow']
+
+    def decorator(f):
+        def wrapped_function(*args, **kwargs):
+            if automatic_options and request.method == 'OPTIONS':
+                resp = current_app.make_default_options_response()
+            else:
+                resp = make_response(f(*args, **kwargs))
+            if not attach_to_all and request.method != 'OPTIONS':
+                return resp
+
+            h = resp.headers
+
+            h['Access-Control-Allow-Origin'] = origin
+            h['Access-Control-Allow-Methods'] = get_methods()
+            h['Access-Control-Max-Age'] = str(max_age)
+            if headers is not None:
+                h['Access-Control-Allow-Headers'] = headers
+            return resp
+
+        f.provide_automatic_options = False
+        return update_wrapper(wrapped_function, f)
+    return decorator
+
 # DESSINS
 
 def dessin_allowed_file(filename):
@@ -34,6 +81,7 @@ def dessin_allowed_file(filename):
            filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
 
 @app.route('/image', methods=['POST', 'GET'])
+@crossdomain(origin='*')
 def dessin_upload_file():
     if request.method == 'POST':
         title = request.form.get('title')
@@ -65,11 +113,13 @@ def dessin_upload_file():
     return json.dumps(ids)
 
 @app.route('/image/main', methods=['GET'])
+@crossdomain(origin='*')
 def dessin_image_principale():
     draw = session.query(Drawing).filter(Drawing.main == 1).all()[0]
     return send_from_directory(app.config['UPLOAD_FOLDER'] + '/dessins/', draw.filename)
 
 @app.route('/image/<draw_id>', methods=['POST', 'GET'])
+@crossdomain(origin='*')
 def dessin_edit_get_file(draw_id):
 
     draw = session.query(Drawing).get(draw_id)
@@ -85,11 +135,13 @@ def dessin_edit_get_file(draw_id):
     return send_from_directory(app.config['UPLOAD_FOLDER'] + '/dessins/', draw.filename)
 
 @app.route('/image/title/<title>', methods=['GET'])
+@crossdomain(origin='*')
 def dessin_get_file_by_title(title):
     draw = session.query(Drawing).filter(Drawing.title == title).all()[0]
     return send_from_directory(app.config['UPLOAD_FOLDER'], draw.filename)
 
 @app.route('/image/delete/<draw_id>', methods=['GET'])
+@crossdomain(origin='*')
 def dessin_delete_file(draw_id):
 
     file = session.query(Drawing).get(draw_id)
@@ -109,6 +161,7 @@ def dessin_delete_file(draw_id):
 
 # INFOS
 @app.route('/info', methods=['POST', 'GET'])
+@crossdomain(origin='*')
 def info_create():
     if request.method == 'POST':
         title = request.form.get('title')
@@ -134,22 +187,26 @@ def info_create():
     return json.dumps(ids)
 
 @app.route('/info/<id>', methods=['GET'])
+@crossdomain(origin='*')
 def info_get(id):
     info = session.query(Info).get(id)
     return json.jsonify(title=info.title, content=info.content)
 
 
 @app.route('/info/main', methods=['GET'])
+@crossdomain(origin='*')
 def info_get_principale():
     info = session.query(Info).filter(Info.main == 1).all()[0]
     return (info.content, 202)
 
 @app.route('/info/title/<title>', methods=['GET'])
+@crossdomain(origin='*')
 def info_get_by_title(title):
     info = session.query(Info).filter(Info.title == title).all()[0]
     return (info.content, 202)
 
 @app.route('/info/delete/<info_id>', methods=['GET'])
+@crossdomain(origin='*')
 def info_delete(info_id):
     session.query(Info).filter_by(id=info_id).delete()
     return ('', 204)
