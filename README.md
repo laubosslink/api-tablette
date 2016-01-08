@@ -101,6 +101,12 @@ method:GET   url: /info/{id}
 ```
 **return**: content
 
+#### Get central info
+```
+method:GET   url: /info/main
+```
+**return**: content
+
 #### Get by title
 ```
 method:GET   url: /info/title/{title}

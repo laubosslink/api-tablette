@@ -139,6 +139,11 @@ def info_get(id):
     return json.jsonify(title=info.title, content=info.content)
 
 
+@app.route('/info/main', methods=['GET'])
+def info_get_principale():
+    info = session.query(Info).filter(Info.main == 1).all()[0]
+    return (info.content, 202)
+
 @app.route('/info/title/<title>', methods=['GET'])
 def info_get_by_title(title):
     info = session.query(Info).filter(Info.title == title).all()[0]

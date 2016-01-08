@@ -12,10 +12,12 @@ class Info(Base):
     id = Column(Integer, primary_key=True)
     title = Column(String(255), unique=True, nullable=False)
     content = Column(String(), nullable=False)
+    main = Column(Integer())
 
-    def __init__(self, title, content):
+    def __init__(self, title, content, main=0):
         self.title = title
         self.content = content
+        self.main = main
 
     def __repr__(self):
         return "Info(id:%r, title:%r, content:%r)" % (self.id, self.title, self.content)
